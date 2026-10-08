@@ -1,0 +1,33 @@
+# ==============================================================================
+# BLUEPRINT:   secure_sshd_config
+# DIRECTORY:   JASPER/Tools/templates/
+# DESCRIPTION: Production-hardened baseline configuration for OpenSSH daemons.
+#              Enforces cryptographic keys and drops legacy access vectors.
+# ==============================================================================
+
+# 🛑 1. Core Connection Properties
+Port 22
+Protocol 2
+LogLevel VERBOSE
+
+# 🔑 2. Administrative Authentication Hardening
+PermitRootLogin no
+PasswordAuthentication no
+PubkeyAuthentication yes
+AuthorizedKeysFile .ssh/authorized_keys
+
+# 🛡️ 3. Brute-Force Perimeter Defenses
+MaxAuthTries 3
+LoginGraceTime 30
+MaxSessions 2
+
+# 🚪 4. Interface Environment Control
+X11Forwarding no
+AllowTcpForwarding no
+PermitUserEnvironment no
+PermitEmptyPasswords no
+
+# ⚙️ 5. Operational Runtime Configurations
+Subsystem sftp internal-sftp
+ClientAliveInterval 300
+ClientAliveCountMax 2
