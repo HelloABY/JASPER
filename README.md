@@ -1,6 +1,6 @@
 # J.A.S.P.E.R. 🚀
 
-Welcome to my repository. This is basically my personal sandbox and public archive where I store everything I configure, learn, and break in the world of network and systems engineering.
+Welcome to my repository. This is my personal sandbox and public archive where I store everything I configure, learn, and break in the world of network and systems engineering.
 
 ---
 
@@ -15,15 +15,16 @@ If you’re a fellow engineer or senior architect browsing this—welcome! Feel 
 
 ---
 
-## 🛠️ What’s Inside the Folders
+## 🛠️ The Global System Architecture (Click a node to explore)
 
-I treat this repo like an organized digital closet. Everything has its specific spot:
+I treat this repo like an organized digital closet. Every folder name below is a direct, clickable shortcut to that specific directory node:
 
-*   📂 **/projects** — Real network topologies and cloud setups I've messed around with (mostly Cisco, GNS3, and Azure practice environments).
-*   📂 **/Tools** — Handy automation scripts, basic server hardening tasks, and PowerShell/Bash files I use to save time.
-*   📂 **/Learn** — My personal study vault. Deep-dives, messy lab notes, and simplified cheat sheets for things like Azure administration.
-*   📂 **/credentials** — The official receipts. My university Licence engineering degree papers and hands-on technical training certifications (like FTTH).
-*   📂 **/portfolio** & **/resume** — The front-facing stuff, including my clean, up-to-date resume.
+*   📂 **[`/projects`](./projects)** — Real network topologies and cloud setups I've messed around with (mostly Cisco, GNS3, and Azure practice environments).
+*   📂 **[`/Tools`](./Tools)** — Handy automation scripts, basic server hardening tasks, and PowerShell/Bash files I use to save time.
+*   📂 **[`/Learn`](./Learn)** — My personal study vault. Deep-dives, messy lab notes, and simplified cheat sheets for things like Azure administration.
+*   📂 **[`/Credentials`](./Credentials)** — The official receipts. My university Licence engineering degree papers and hands-on technical training certifications (like FTTH).
+*   📂 **[`/Portfolio`](./Portfolio)** — The front-facing webpage interface layout, component structures, and design assets mapping out the visual hub.
+*   📂 **[`/Resume`](./Resume)** — Highly updated, clean, and ATS-optimized technical resume documentation.
 
 ---
 
@@ -33,4 +34,4 @@ The industry loves telling anyone entering the network or cloud field to "start 
 
 The name stands for: **J**ust **A** **S**tep **P**ast **E**ntry-Level **R**oles. 
 
-It's just a reminder to myself—and anyone looking at my profile—that I'm ready to skip the basic password resets, jump straight into real configurations, and get my hands dirty.
+It's just a reminder to myself and anyone looking at my profile that I'm ready to skip the basic password resets, jump straight into real configurations, and get my hands dirty.
