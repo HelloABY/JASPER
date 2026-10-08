@@ -19,7 +19,7 @@ If you’re a fellow engineer or senior architect browsing this—welcome! Feel 
 
 I treat this repo like an organized digital closet. Every folder name below is a direct, clickable shortcut to that specific directory node:
 
-*   📂 **[`/projects`](./projects)** — Real network topologies and cloud setups I've messed around with (mostly Cisco, GNS3, and Azure practice environments).
+*   📂 **[`/Projects`](./Projects)** — Real network topologies and cloud setups I've messed around with (mostly Cisco, GNS3, and Azure practice environments).
 *   📂 **[`/Tools`](./Tools)** — Handy automation scripts, basic server hardening tasks, and PowerShell/Bash files I use to save time.
 *   📂 **[`/Learn`](./Learn)** — My personal study vault. Deep-dives, messy lab notes, and simplified cheat sheets for things like Azure administration.
 *   📂 **[`/Credentials`](./Credentials)** — The official receipts. My university Licence engineering degree papers and hands-on technical training certifications (like FTTH).
