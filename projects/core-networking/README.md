@@ -1,37 +1,73 @@
-# 📡 Core Networking & Hybrid Topology Architecture
+# 📡 Lab 01: Multi-Zone VLAN Segmentation & ACL Hardening (GNS3)
 
 ## 📌 Project Overview
-This module acts as a dedicated archive for my standalone network infrastructure labs, physical routing configurations, and local virtualization topologies. 
-
-The primary objective is to simulate enterprise-grade hybrid environments, testing the data transit link layers between traditional hardware appliances, software-defined routes, and virtualized computing blocks.
+This project documents a manual, hands-on network isolation lab built inside GNS3 using a Cisco 7200 routing node. The objective was to configure a secure local topology that completely segments guest traffic from the internal secure data sector while maintaining strict access control boundaries.
 
 ---
 
-## 🛠️ Implemented Technologies & Technical Stack
-*   **Virtualization Hypervisors:** KVM / QEMU kernel-based architecture, virtual switch integration, and local bridge interface provisioning.
-*   **Simulation Engines:** GNS3 / Cisco Packet Tracer mapping for complex topologies.
-*   **Core Routing Protocols:** WAN routing strategies, static path isolation, and subnetting structures (IPv4 VLSM).
-*   **Traffic Controllers:** Access Control Lists (ACLs) and network interface filtering paradigms.
+## 🗺️ Physical & Logical Topology Details
+*   **Edge Router:** `JASPER-EDGE-R01`
+*   **Secure Subnet (VLAN 10):** `10.0.10.0/24` (Gateway: `10.0.10.1`)
+*   **Guest Subnet (VLAN 20):** `172.16.20.0/24` (Gateway: `172.16.20.1`)
+*   **WAN Link Layer:** DHCP boundary via physical interface bridge `GigabitEthernet0/0`
 
 ---
 
-## 🗺️ Tested Laboratory Topologies
+## 🛠️ Step-by-Step Configuration Notebook
 
-### 🎛️ 1. Multi-Zone Local Routing & VLAN Segmentation
-*   **Objective:** Construct a three-tier network architecture separating corporate traffic, guest access links, and administrative control paths.
-*   **Implementation:** Configured dynamic inter-VLAN routing patterns on virtualized switchboards, ensuring isolated broadcast domains and dropping unauthenticated packets across boundaries.
+Instead of just automated scripts, this topology was initialized manually to test link-layer behaviors. 
 
-### 🐧 2. Kernel-Based Virtualization & Network Bridging (KVM)
-*   **Objective:** Deploy and connect localized Linux guest servers using high-performance host bridge components.
-*   **Implementation:** Configured native host bridges (`br0`) inside a local Linux machine to pass internal virtual machine network cards straight into the physical gateway layer without NAT interference.
+### 1. Initializing Sub-Interfaces & Dot1Q Encapsulation
+To pass multiple isolated broadcast domains through a single trunk link to our switch environment, sub-interfaces were initialized on the core interface:
 
-### 🛡️ 3. Default Gateway Failover & Latency Audits
-*   **Objective:** Simulate a wide-area network (WAN) link failure and analyze alternative route convergence tracking times.
-*   **Implementation:** Intentionally severed interface endpoints inside simulation topologies, verified automated local route table adaptation sequences, and audited latency recovery states via automated test tools.
+```text
+Router# configure terminal
+Router(config)# interface GigabitEthernet0/1.10
+Router(config-subif)# description Secure Internal Operations Sector
+Router(config-subif)# encapsulation dot1Q 10
+Router(config-subif)# ip address 10.0.10.1 255.255.255.0
+```
+
+### 2. Hardening the Network Perimeter (Extended ACLs)
+An extended Access Control List (`SECURE_PERIMETER_ACL`) was engineered to block the Guest network (`172.16.20.0/24`) from scanning or communicating with the secure internal subnet, while still allowing them to route out to the internet for HTTP/HTTPS traffic:
+
+```text
+Router(config)# ip access-list extended SECURE_PERIMETER_ACL
+Router(config-ext-nacl)# deny ip 172.16.20.0 0.0.0.255 10.0.10.0 0.0.0.255
+Router(config-ext-nacl)# permit ip any any
+Router(config)# interface GigabitEthernet0/1.20
+Router(config-subif)# ip access-group SECURE_PERIMETER_ACL in
+```
 
 ---
 
-## 🚀 Repository Directory Checklist
-* [x] **Topological Maps:** Comprehensive layout diagrams capturing IP assignments and node boundaries.
-* [ ] **Device Configurations:** Raw text configuration dumps from routers and switch interfaces.
-* [ ] **Audit Validation Run:** Local connection diagnostics and performance capture sheets.
+## 🧠 Real Lab Troubleshooting Log (My Philosophy in Action)
+
+**The Issue Encountered:** 
+During initial link-layer validation testing, host machines inside Guest VLAN 20 were completely unable to ping the external default gateway or fetch public web traffic, even though local routing tables were active.
+
+**The Diagnostic Process:** 
+I ran an interface check (`show ip interface brief`) and found that while sub-interface `GigabitEthernet0/1.20` was up, the physical carrier interface `GigabitEthernet0/1` was in an unassigned administrative state. 
+
+**The Resolution:** 
+In Cisco systems, sub-interfaces cannot pass transit frames if the primary interface is disabled. Escallated to the physical carrier node and forcefully toggled the link state:
+```text
+Router(config)# interface GigabitEthernet0/1
+Router(config-if)# no shutdown
+```
+Immediately following the link status change, spanning-tree converged and ICMP packet transport was successfully restored across all interface boundaries.
+
+---
+
+## 📊 Live Verification Logs (Verification Run)
+
+This is the actual operational console log captured from `JASPER-EDGE-R01` confirming the active interface properties:
+
+```text
+JASPER-EDGE-R01# show ip interface brief
+Interface                  IP-Address      OK? Method Status                Protocol
+GigabitEthernet0/0         192.168.1.112   YES DHCP   up                    up      
+GigabitEthernet0/1         unassigned      YES unset  up                    up      
+GigabitEthernet0/1.10      10.0.10.1       YES manual up                    up      
+GigabitEthernet0/1.20      172.16.20.1     YES manual up                    up      
+```
